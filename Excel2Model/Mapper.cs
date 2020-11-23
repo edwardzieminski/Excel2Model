@@ -27,7 +27,7 @@ namespace Excel2Model
         {
             var output = new List<T>();
             var currentRow = DataStartRow;
-            var anyValueFulfilled = true;
+            bool anyValueFulfilled;
 
             do
             {
@@ -39,7 +39,7 @@ namespace Excel2Model
                     columnMap.Property.SetValue(modelRecord, cellValue);
                 }
 
-                anyValueFulfilled = IsAnyValueFulfilled(modelRecord);
+                anyValueFulfilled = Utilities.IsAnyValueFulfilled(modelRecord);
 
                 if (anyValueFulfilled)
                 {
@@ -50,26 +50,6 @@ namespace Excel2Model
             } while (anyValueFulfilled);
 
             return output;
-        }
-
-        private static bool IsAnyValueFulfilled(T modelRecord)
-        {
-            var anyStringFulfilled = modelRecord.GetType().GetProperties()
-                .Where(pi => pi.PropertyType == typeof(string))
-                .Select(pi => (string)pi.GetValue(modelRecord))
-                .Any(value => string.IsNullOrEmpty(value) == false);
-
-            var anyIntDifferentThanZero = modelRecord.GetType().GetProperties()
-                .Where(pi => pi.PropertyType == typeof(int))
-                .Select(pi => (int)pi.GetValue(modelRecord))
-                .Any(value => value != 0);
-
-            var anyDoubleDifferentThanZero = modelRecord.GetType().GetProperties()
-                .Where(pi => pi.PropertyType == typeof(double))
-                .Select(pi => (double)pi.GetValue(modelRecord))
-                .Any(value => value != 0d);
-
-            return anyStringFulfilled || anyIntDifferentThanZero || anyDoubleDifferentThanZero;
         }
     }
 }
