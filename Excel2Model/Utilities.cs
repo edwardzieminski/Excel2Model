@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -36,6 +38,47 @@ namespace Excel2Model
             }
 
             return (PropertyInfo)output.Member;
+        }
+
+        public static List<T> GetPropertiesFromObjectBySpecificType<T>(object objectWithProperties) =>
+            objectWithProperties.GetType().GetProperties()
+                            .Where(propertyInfo => propertyInfo.PropertyType == typeof(T))
+                            .Select(propertyInfo => (T)propertyInfo.GetValue(objectWithProperties))
+                            .ToList();
+
+        public static bool IsAnyValueFulfilledByType<T>(object objectWithProperties)
+        {
+            var properties = GetPropertiesFromObjectBySpecificType<T>(objectWithProperties);
+
+            var output = typeof(T).IsValueType switch
+            {
+                true => properties.Any(value => EqualityComparer<T>.Default.Equals(value, default) == false),
+                _ => properties.Any(value => value != null)
+            };
+
+            return output;
+        }
+
+        public static bool IsAnyValueFulfilled(object objectToBeChecked)
+        { 
+            // consider change to static array of types instead of below solution - reflection could be avoided
+
+            foreach (TypeCode typeCode in Enum.GetValues(typeof(TypeCode)))
+            {
+                var type = Type.GetType($"System.{typeCode}");
+                var typeOfContext = typeof(Utilities);
+                var method = typeOfContext.GetMethod("IsAnyValueFulfilledByType");
+                var genericMethod = method.MakeGenericMethod(type);
+                object[] parameters = { objectToBeChecked };
+                var result = (bool)genericMethod.Invoke(typeOfContext, parameters);
+
+                if (result == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
