@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Excel2Model
@@ -55,6 +56,40 @@ namespace Excel2Model
                 .Where(x => x.Key == index)
                 .Select(x => x.Value)
                 .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Supports column names of 1 or 2 capital letters.
+        /// </summary>
+        public static int GetColumnIndexByColumnName(string columnName)
+        {
+            int firstLetterIndex;
+            int secondLetterIndex;
+
+            if (columnName.Length == 1)
+            {
+                firstLetterIndex = GetIndexOfLetter(default);
+                secondLetterIndex = GetIndexOfLetter(columnName.ToUpper()[0]);
+            }
+            else if (columnName.Length == 2)
+            {
+                firstLetterIndex = GetIndexOfLetter(columnName.ToUpper()[0]);
+                secondLetterIndex = GetIndexOfLetter(columnName.ToUpper()[1]);
+            }
+            else
+            {
+                throw new Exception("Incorrect columName provided.");
+            }
+
+            return (firstLetterIndex * 26) + secondLetterIndex;
+        }
+
+        public static string GetColumnNameByColumnIndex(int columnIndex)
+        {
+            char firstLetter = GetLetterByIndex((columnIndex-1) / 26);
+            char secondLetter = GetLetterByIndex(columnIndex % 26);
+
+            return $"{firstLetter}{secondLetter}";
         }
     }
 }
