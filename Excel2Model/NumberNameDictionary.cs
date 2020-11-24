@@ -11,7 +11,7 @@ namespace Excel2Model
         {
             _nameNumberPairs = new Dictionary<int, string>()
             {
-                { 0, "" },
+                { 0, default },
                 { 1, "A" },
                 { 2, "B" },
                 { 3, "C" },
