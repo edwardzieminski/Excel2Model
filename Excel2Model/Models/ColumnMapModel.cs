@@ -1,7 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Excel2Model
+namespace Excel2Model.Models
 {
     public record ColumnMapModel<T>
     {

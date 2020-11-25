@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Excel2Model.Models;
+using Excel2Model.Utilities;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Excel2Model
+namespace Excel2Model.Mappers
 {
     public class Mapper<T> where T : new()
     {
@@ -19,7 +20,7 @@ namespace Excel2Model
             _columnMapModels.Add(new ColumnMapModel<T>()
             {
                 ColumnName = columnName,
-                Property = Utilities.GetPropertyFromExpression(tProperty)
+                Property = CommonUtilities.GetPropertyFromExpression(tProperty)
             });
         }
 
@@ -39,7 +40,7 @@ namespace Excel2Model
                     columnMap.Property.SetValue(modelRecord, cellValue);
                 }
 
-                anyValueFulfilled = Utilities.IsAnyValueFulfilled(modelRecord);
+                anyValueFulfilled = CommonUtilities.IsAnyValueFulfilled(modelRecord);
 
                 if (anyValueFulfilled)
                 {
