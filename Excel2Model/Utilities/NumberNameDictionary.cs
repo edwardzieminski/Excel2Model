@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Excel2Model
+namespace Excel2Model.Utilities
 {
     public static class NumberNameDictionary
     {

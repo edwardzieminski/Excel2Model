@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Excel2Model
+namespace Excel2Model.Utilities
 {
-    public static class Utilities
+    public static class CommonUtilities
     {
         public static PropertyInfo GetPropertyFromExpression<T>(Expression<Func<T, object>> GetPropertyLambda)
         {
@@ -66,7 +66,7 @@ namespace Excel2Model
             foreach (TypeCode typeCode in Enum.GetValues(typeof(TypeCode)))
             {
                 var type = Type.GetType($"System.{typeCode}");
-                var typeOfContext = typeof(Utilities);
+                var typeOfContext = typeof(CommonUtilities);
                 var method = typeOfContext.GetMethod("IsAnyValueFulfilledByType");
                 var genericMethod = method.MakeGenericMethod(type);
                 object[] parameters = { objectToBeChecked };
