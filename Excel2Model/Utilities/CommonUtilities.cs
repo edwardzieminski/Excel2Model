@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Excel2Model.Validation;
+using Optional;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,36 +10,36 @@ namespace Excel2Model.Utilities
 {
     public static class CommonUtilities
     {
-        public static PropertyInfo GetPropertyFromExpression<T>(Expression<Func<T, object>> GetPropertyLambda)
+        public static Option<PropertyInfo, ValidationError> GetPropertyFromExpression<T>(Expression<Func<T, object>> GetPropertyLambda)
         {
             // Inspired by:
             // https://stackoverflow.com/questions/17115634/get-propertyinfo-of-a-parameter-passed-as-lambda-expression
             // Author: Daniel Möller
 
-            MemberExpression output;
+            Option<PropertyInfo, ValidationError> output;
 
             //this line is necessary, because sometimes the expression comes in as Convert(originalexpression)
             if (GetPropertyLambda.Body is UnaryExpression unaryExpression)
             {
                 if (unaryExpression.Operand is MemberExpression memberExpression)
                 {
-                    output = memberExpression;
+                    output = Option.Some<PropertyInfo, ValidationError>((PropertyInfo)memberExpression.Member);
                 }
                 else
                 {
-                    throw new ArgumentException("Incorrect argument. Provided unary expression is not member expression.");
+                    output = Option.None<PropertyInfo, ValidationError>(new ValidationError("Incorrect argument. Provided unary expression is not member expression."));
                 }
             }
             else if (GetPropertyLambda.Body is MemberExpression memberExpression)
             {
-                output = memberExpression;
+                output = Option.Some<PropertyInfo, ValidationError>((PropertyInfo)memberExpression.Member);
             }
             else
             {
-                throw new ArgumentException("Incorrect argument. Provided property lambda is not member expression.");
+                output = Option.None<PropertyInfo, ValidationError>(new ValidationError("Incorrect argument. Provided property lambda is not member expression."));
             }
 
-            return (PropertyInfo)output.Member;
+            return output;
         }
 
         public static List<T> GetPropertiesFromObjectBySpecificType<T>(object objectWithProperties) =>
