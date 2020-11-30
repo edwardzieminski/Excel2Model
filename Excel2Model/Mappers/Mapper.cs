@@ -1,5 +1,6 @@
 ﻿using Excel2Model.Models;
 using Excel2Model.Utilities;
+using Optional.Unsafe;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -17,11 +18,16 @@ namespace Excel2Model.Mappers
 
         public void AddColumn(string columnName, Expression<Func<T, object>> tProperty)
         {
-            _columnMapModels.Add(new ColumnMapModel<T>()
+            var propertyOrValidationError = CommonUtilities.GetPropertyFromExpression(tProperty);
+
+            if (propertyOrValidationError.HasValue)
             {
-                ColumnName = columnName,
-                Property = CommonUtilities.GetPropertyFromExpression(tProperty)
-            });
+                _columnMapModels.Add(new ColumnMapModel<T>()
+                {
+                    ColumnName = columnName,
+                    Property = propertyOrValidationError.ValueOrDefault()
+                });
+            }
         }
 
         public List<T> GetDataFromExcel()
