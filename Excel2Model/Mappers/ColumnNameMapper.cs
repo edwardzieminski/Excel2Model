@@ -8,7 +8,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Excel2Model.Mappers
 {
-    public class Mapper<T> where T : new()
+    public class ColumnNameMapper<T> where T : new()
     {
         private readonly List<ColumnMapModel<T>> _columnMapModels = new List<ColumnMapModel<T>>();
 
