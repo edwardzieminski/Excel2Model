@@ -12,7 +12,7 @@ namespace Excel2ModelUnitTests
             var expectedPropertyName = "TestPropertyInt";
 
             // ACT
-            var actualPropertyInfo = CommonUtilities.GetPropertyFromExpression<TestClass>(x => x.TestPropertyInt);
+            var actualPropertyInfo = CommonUtilities.TryGetPropertyFromExpression<TestClass>(x => x.TestPropertyInt);
             var actualPropertyNameIsEqualToExpectedPropertyName = actualPropertyInfo.Exists(x => x.Name == expectedPropertyName);
 
             // ASSERT
