@@ -7,7 +7,7 @@ namespace Excel2Model.Utilities
 {
     public static class ExcelInteropUtilities
     {
-        public static Option<Excel.Worksheet, ValidationError> GetWorksheet(WorksheetModel worksheetModel)
+        public static Option<Excel.Worksheet, ValidationError> TryGetWorksheet(WorksheetModel worksheetModel)
         {
             if (FilesUtilities.FileExists(worksheetModel.WorkbookPath) == false)
                 return Option.None<Excel.Worksheet, ValidationError>(new ValidationError("Provided file does not exist"));
