@@ -11,7 +11,7 @@ namespace Excel2Model.Mappers
 {
     public class ColumnNameMapper<T> : AbstractMapper<T> where T : new()
     {
-        public override Option<ColumnMapModel<T>, ValidationError> TryAddColumn(string columnName, Expression<Func<T, object>> tProperty)
+        public Option<ColumnMapModel<T>, ValidationError> TryAddColumn(string columnName, Expression<Func<T, object>> tProperty)
         {
             Option<ColumnMapModel<T>, ValidationError> output = new Option<ColumnMapModel<T>, ValidationError>();
 

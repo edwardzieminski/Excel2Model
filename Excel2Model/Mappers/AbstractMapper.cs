@@ -40,8 +40,6 @@ namespace Excel2Model.Mappers
             _excelInteropWorksheetOrValidationError = ExcelInteropUtilities.TryGetWorksheet(WorksheetModel);
         }
 
-        public abstract Option<ColumnMapModel<T>, ValidationError> TryAddColumn(string columnName, Expression<Func<T, object>> tProperty);
-
         private protected ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo)
         {
             var output = new ColumnMapModel<T>()
