@@ -12,7 +12,7 @@ namespace Excel2Model.Utilities
             if (FilesUtilities.FileExists(worksheetModel.WorkbookPath) == false)
                 return Option.None<Excel.Worksheet, ValidationError>(new ValidationError("Provided file does not exist"));
 
-            if (IsWorksheetIndexOrNameProvided(worksheetModel))
+            if (IsWorksheetIndexOrNameProvided(worksheetModel) == false)
                 return Option.None<Excel.Worksheet, ValidationError>(new ValidationError("Provided worksheet is incorrect."));
 
             if (AreBothWorksheetIndexAndNameProvided(worksheetModel))
@@ -20,7 +20,7 @@ namespace Excel2Model.Utilities
 
             Excel.Application excelApp;
             Excel.Workbook excelWkb;
-            Excel.Worksheet excelWks = new Excel.Worksheet();
+            dynamic excelWks = new object();
 
             try
             {
@@ -44,7 +44,7 @@ namespace Excel2Model.Utilities
             {
                 try
                 {
-                    excelWks = (Excel.Worksheet)excelWkb.Worksheets[worksheetModel.WorksheetName];
+                    excelWks = excelWkb.Worksheets[worksheetModel.WorksheetName];
                 }
                 catch
                 {
@@ -56,7 +56,7 @@ namespace Excel2Model.Utilities
             {
                 try
                 {
-                    excelWks = (Excel.Worksheet)excelWkb.Worksheets[worksheetModel.WorksheetIndex];
+                    excelWks = excelWkb.Worksheets[worksheetModel.WorksheetIndex];
                 }
                 catch
                 {
@@ -64,7 +64,7 @@ namespace Excel2Model.Utilities
                 }
             }
 
-            return Option.Some<Excel.Worksheet, ValidationError>(excelWks);
+            return Option.Some<Excel.Worksheet, ValidationError>((Excel.Worksheet)excelWks);
         }
 
         public static bool IsWorksheetIndexCorrect(WorksheetModel worksheetModel) =>
@@ -74,9 +74,9 @@ namespace Excel2Model.Utilities
             string.IsNullOrWhiteSpace(worksheetModel.WorksheetName) == false;
 
         public static bool IsWorksheetIndexOrNameProvided(WorksheetModel worksheetModel) =>
-            (IsWorksheetIndexCorrect(worksheetModel) || IsWorksheetNameProvided(worksheetModel));
+            IsWorksheetIndexCorrect(worksheetModel) || IsWorksheetNameProvided(worksheetModel);
 
         public static bool AreBothWorksheetIndexAndNameProvided(WorksheetModel worksheetModel) =>
-            (IsWorksheetIndexCorrect(worksheetModel) && IsWorksheetNameProvided(worksheetModel));
+            IsWorksheetIndexCorrect(worksheetModel) && IsWorksheetNameProvided(worksheetModel);
     }
 }
