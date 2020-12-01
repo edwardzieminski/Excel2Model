@@ -10,7 +10,7 @@ namespace Excel2Model.Utilities
 {
     public static class CommonUtilities
     {
-        public static Option<PropertyInfo, ValidationError> GetPropertyFromExpression<T>(Expression<Func<T, object>> GetPropertyLambda)
+        public static Option<PropertyInfo, ValidationError> TryGetPropertyFromExpression<T>(Expression<Func<T, object>> GetPropertyLambda)
         {
             // Inspired by:
             // https://stackoverflow.com/questions/17115634/get-propertyinfo-of-a-parameter-passed-as-lambda-expression
