@@ -40,18 +40,7 @@ namespace Excel2Model.Mappers
             _excelInteropWorksheetOrValidationError = ExcelInteropUtilities.TryGetWorksheet(WorksheetModel);
         }
 
-        private protected ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo)
-        {
-            var output = new ColumnMapModel<T>()
-            {
-                ColumnName = columnName,
-                Property = propertyInfo
-            };
-
-            _columnMapModels.Add(output);
-
-            return output;
-        }
+        private protected abstract ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo);
 
         public Option<List<T>, ValidationError> TryGetDataFromExcel()
         {
