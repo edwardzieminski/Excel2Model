@@ -27,11 +27,11 @@ namespace Excel2Model.Mappers
             return output;
         }
 
-        private protected override ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo)
+        private protected override ColumnMapModel<T> AddColumn(string columnHeader, PropertyInfo propertyInfo)
         {
             var output = new ColumnMapModel<T>()
             {
-                ColumnName = columnName,
+                ColumnHeader = columnHeader,
                 Property = propertyInfo
             };
 
