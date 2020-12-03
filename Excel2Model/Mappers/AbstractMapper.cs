@@ -10,7 +10,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Excel2Model.Mappers
 {
-    public abstract class AbstractMapper<T>
+    public abstract class AbstractMapper<T> where T : new()
     {
         private protected List<ColumnMapModel<T>> _columnMapModels = new List<ColumnMapModel<T>>();
         private protected Option<Excel.Worksheet, ValidationError> _excelInteropWorksheetOrValidationError;
@@ -67,6 +67,42 @@ namespace Excel2Model.Mappers
             return output;
         }
 
-        private protected abstract List<T> GetDataFromExcelInterop(Excel.Worksheet excelInteropWorksheet);
+        private protected List<T> GetDataFromExcelInterop(Excel.Worksheet excelInteropWorksheet)
+        {
+            var output = new List<T>();
+
+            var currentRow = WorksheetModel.DataStartRow;
+            bool anyValueFulfilled;
+
+            do
+            {
+                var modelRecord = ExcelInteropRowToModelRecord(excelInteropWorksheet, currentRow);
+
+                anyValueFulfilled = CommonUtilities.IsAnyValueFulfilled(modelRecord);
+
+                if (anyValueFulfilled)
+                {
+                    output.Add(modelRecord);
+                }
+
+                currentRow++;
+            } while (anyValueFulfilled);
+
+            return output;
+        }
+
+        private protected T ExcelInteropRowToModelRecord(Excel.Worksheet excelInteropWorksheet, int currentRow)
+        {
+            var modelRecord = new T();
+
+            foreach (var columnMap in _columnMapModels)
+            {
+                var cellAddress = $"{columnMap.ColumnName}{currentRow}";
+                var cellValue = excelInteropWorksheet.Range[cellAddress].Value;
+                columnMap.Property.SetValue(modelRecord, cellValue);
+            }
+
+            return modelRecord;
+        }
     }
 }

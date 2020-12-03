@@ -1,10 +1,8 @@
-﻿using Excel = Microsoft.Office.Interop.Excel;
-using Excel2Model.Models;
+﻿using Excel2Model.Models;
 using Excel2Model.Utilities;
 using Excel2Model.Validation;
 using Optional;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -36,36 +34,6 @@ namespace Excel2Model.Mappers
             };
 
             _columnMapModels.Add(output);
-
-            return output;
-        }
-
-        private protected override List<T> GetDataFromExcelInterop(Excel.Worksheet excelInteropWorksheet)
-        {
-            var output = new List<T>();
-
-            var currentRow = WorksheetModel.DataStartRow;
-            bool anyValueFulfilled;
-
-            do
-            {
-                var modelRecord = new T();
-                foreach (var columnMap in _columnMapModels)
-                {
-                    var cellAddress = $"{columnMap.ColumnName}{currentRow}";
-                    var cellValue = excelInteropWorksheet.Range[cellAddress].Value;
-                    columnMap.Property.SetValue(modelRecord, cellValue);
-                }
-
-                anyValueFulfilled = CommonUtilities.IsAnyValueFulfilled(modelRecord);
-
-                if (anyValueFulfilled)
-                {
-                    output.Add(modelRecord);
-                }
-
-                currentRow++;
-            } while (anyValueFulfilled);
 
             return output;
         }
