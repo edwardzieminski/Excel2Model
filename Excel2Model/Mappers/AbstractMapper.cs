@@ -10,7 +10,7 @@ namespace Excel2Model.Mappers
 {
     public abstract class AbstractMapper<T> where T : new()
     {
-        private protected List<ColumnMapModel<T>> _columnMapModels = new List<ColumnMapModel<T>>();
+        private protected List<ColumnMapModel> _columnMapModels = new List<ColumnMapModel>();
         private protected Option<Excel.Worksheet, ValidationError> _excelInteropWorksheetOrValidationError;
         private protected WorksheetModel _worksheetModel;
 
@@ -98,7 +98,7 @@ namespace Excel2Model.Mappers
             return output;
         }
 
-        private protected abstract ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo);
+        private protected abstract ColumnMapModel AddColumn(string columnName, PropertyInfo propertyInfo);
 
         private void SetExcelInteropWorksheet()
         {

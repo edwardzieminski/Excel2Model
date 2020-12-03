@@ -2,7 +2,7 @@
 
 namespace Excel2Model.Models
 {
-    public record ColumnMapModel<T>
+    public record ColumnMapModel
     {
         public string ColumnName { get; init; }
         public int ColumnIndex { get; init; }

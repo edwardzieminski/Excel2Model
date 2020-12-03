@@ -11,16 +11,16 @@ namespace Excel2Model.Mappers
 {
     public class ColumnNameMapper<T> : AbstractMapper<T> where T : new()
     {
-        public Option<ColumnMapModel<T>, ValidationError> TryAddColumn(string columnName, Expression<Func<T, object>> tProperty)
+        public Option<ColumnMapModel, ValidationError> TryAddColumn(string columnName, Expression<Func<T, object>> tProperty)
         {
-            Option<ColumnMapModel<T>, ValidationError> output = new Option<ColumnMapModel<T>, ValidationError>();
+            Option<ColumnMapModel, ValidationError> output = new Option<ColumnMapModel, ValidationError>();
 
             var propertyOrValidationError = CommonUtilities.TryGetPropertyFromExpression(tProperty);
 
             propertyOrValidationError.Match
             (
-                some: propertyInfo => output = Option.Some<ColumnMapModel<T>, ValidationError>(AddColumn(columnName, propertyInfo)),
-                none: validationError => output = Option.None<ColumnMapModel<T>, ValidationError>(validationError)
+                some: propertyInfo => output = Option.Some<ColumnMapModel, ValidationError>(AddColumn(columnName, propertyInfo)),
+                none: validationError => output = Option.None<ColumnMapModel, ValidationError>(validationError)
             );
 
             return output;
@@ -35,9 +35,9 @@ namespace Excel2Model.Mappers
             
         }
 
-        private protected override ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo)
+        private protected override ColumnMapModel AddColumn(string columnName, PropertyInfo propertyInfo)
         {
-            var output = new ColumnMapModel<T>()
+            var output = new ColumnMapModel()
             {
                 ColumnName = columnName,
                 Property = propertyInfo
