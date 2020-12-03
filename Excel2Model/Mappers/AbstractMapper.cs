@@ -1,12 +1,10 @@
-﻿using Excel2Model.Models;
+﻿using Excel = Microsoft.Office.Interop.Excel;
+using Excel2Model.Models;
 using Excel2Model.Utilities;
 using Excel2Model.Validation;
 using Optional;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Reflection;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Excel2Model.Mappers
 {
@@ -35,13 +33,6 @@ namespace Excel2Model.Mappers
             }
         }
 
-        private void SetExcelInteropWorksheet()
-        {
-            _excelInteropWorksheetOrValidationError = ExcelInteropUtilities.TryGetWorksheet(WorksheetModel);
-        }
-
-        private protected abstract ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo);
-
         public Option<List<T>, ValidationError> TryGetDataFromExcel()
         {
             Option<List<T>, ValidationError> output = new Option<List<T>, ValidationError>();
@@ -65,6 +56,20 @@ namespace Excel2Model.Mappers
             );
 
             return output;
+        }
+
+        private protected T ExcelInteropRowToModelRecord(Excel.Worksheet excelInteropWorksheet, int currentRow)
+        {
+            var modelRecord = new T();
+
+            foreach (var columnMap in _columnMapModels)
+            {
+                var cellAddress = $"{columnMap.ColumnName}{currentRow}";
+                var cellValue = excelInteropWorksheet.Range[cellAddress].Value;
+                columnMap.Property.SetValue(modelRecord, cellValue);
+            }
+
+            return modelRecord;
         }
 
         private protected List<T> GetDataFromExcelInterop(Excel.Worksheet excelInteropWorksheet)
@@ -91,18 +96,11 @@ namespace Excel2Model.Mappers
             return output;
         }
 
-        private protected T ExcelInteropRowToModelRecord(Excel.Worksheet excelInteropWorksheet, int currentRow)
+        private protected abstract ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo);
+
+        private void SetExcelInteropWorksheet()
         {
-            var modelRecord = new T();
-
-            foreach (var columnMap in _columnMapModels)
-            {
-                var cellAddress = $"{columnMap.ColumnName}{currentRow}";
-                var cellValue = excelInteropWorksheet.Range[cellAddress].Value;
-                columnMap.Property.SetValue(modelRecord, cellValue);
-            }
-
-            return modelRecord;
+            _excelInteropWorksheetOrValidationError = ExcelInteropUtilities.TryGetWorksheet(WorksheetModel);
         }
     }
 }
