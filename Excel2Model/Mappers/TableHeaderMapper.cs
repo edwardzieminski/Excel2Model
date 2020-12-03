@@ -20,7 +20,7 @@ namespace Excel2Model.Mappers
 
             propertyOrValidationError.Match
             (
-                some: propertyInfo => output = Option.Some<ColumnMapModel<T>, ValidationError>(AddColumn(columnName, propertyInfo)),
+                some: propertyInfo => output = Option.Some<ColumnMapModel<T>, ValidationError>(AddColumn(columnHeader, propertyInfo)),
                 none: validationError => output = Option.None<ColumnMapModel<T>, ValidationError>(validationError)
             );
 
