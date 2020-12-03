@@ -3,6 +3,7 @@ using Excel2Model.Utilities;
 using Excel2Model.Validation;
 using Optional;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -23,6 +24,15 @@ namespace Excel2Model.Mappers
             );
 
             return output;
+        }
+
+        /// <summary>
+        /// This method should be used after all columns are added. It is recommended to wrap this method in try-catch block 
+        /// as it is going to throw CouldNotResolveMapException.
+        /// </summary>
+        public override void ResolveMap()
+        {
+            
         }
 
         private protected override ColumnMapModel<T> AddColumn(string columnName, PropertyInfo propertyInfo)

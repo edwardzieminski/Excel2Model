@@ -58,6 +58,8 @@ namespace Excel2Model.Mappers
             return output;
         }
 
+        public abstract void ResolveMap();
+
         private protected T ExcelInteropRowToModelRecord(Excel.Worksheet excelInteropWorksheet, int currentRow)
         {
             var modelRecord = new T();
