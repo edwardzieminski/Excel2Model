@@ -1,7 +1,7 @@
-﻿using Excel2Model.Models;
+﻿using Excel = Microsoft.Office.Interop.Excel;
+using Excel2Model.Models;
 using Excel2Model.Utilities;
 using Excel2Model.Validation;
-using Microsoft.Office.Interop.Excel;
 using Optional;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Excel2Model.Mappers
             return output;
         }
 
-        private protected override List<T> GetDataFromExcelInterop(Worksheet excelInteropWorksheet)
+        private protected override List<T> GetDataFromExcelInterop(Excel.Worksheet excelInteropWorksheet)
         {
             throw new NotImplementedException();
         }
